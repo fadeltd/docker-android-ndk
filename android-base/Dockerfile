@@ -1,27 +1,26 @@
 # extract libgcc from the same base image than the one used to build glibc
 # (see https://github.com/sgerrand/docker-glibc-builder/blob/master/Dockerfile)
-ARG GLIBC_VERSION="2.30-r0"
-ARG UBUNTU_VERSION="19.0.4"
-ARG GLIBC_IMAGE=ubuntu:${UBUNTU_VERSION}
+# ARG UBUNTU_VERSION="19.0.4"
+# ARG GLIBC_IMAGE=ubuntu:${UBUNTU_VERSION}
 
 ARG JAVA_MAJOR_VERSION="8"
 ARG JAVA_MINOR_VERSION="212"
 ARG JAVA_VERSION="${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}"
 
-# ARG ALPINE_VERSION="3.11.3"
-ARG ALPINE_VERSION="3.9"
-ARG ALPINE_JDK_IMAGE=openjdk:${JAVA_MAJOR_VERSION}-alpine${ALPINE_VERSION}
-
 # FROM ${ALPINE_GLIBC_IMAGE} as libgcc
 # RUN chmod +x /lib/x86_64-linux-gnu/libz.so.1.2.11
 
-FROM ${ALPINE_JDK_IMAGE}
+FROM fadeltd/openjdk:8-alpine3.11
 LABEL maintainer="Fadel Trivandi Dipantara <fadeltd@hotmail.com>"
 LABEL description="Android NDK Base"
 
 ARG SDK_TOOLS="4333796"
 ARG CMAKE_VERSION="3.6.4111459"
 ARG NDK_VERSION="21.0.6113669"
+
+ARG GLIBC_VERSION="2.30-r0"
+ARG GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}"
+ARG GLIBC_PKGS="glibc-${GLIBC_VERSION}.apk glibc-bin-${GLIBC_VERSION}.apk glibc-i18n-${GLIBC_VERSION}.apk"
 
 ENV ANDROID_HOME "/opt/android/sdk"
 ENV ANDROID_NDK_HOME "$ANDROID_HOME/ndk/${NDK_VERSION}"
@@ -30,12 +29,10 @@ ENV PATH=$PATH:$ANDROID_HOME/cmake/${CMAKE_VERSION}/bin/:$ANDROID_HOME/tools:$AN
 # Add the extra libs
 # COPY --from=libgcc /lib/x86_64-linux-gnu/libgcc_s.so.1 /lib/x86_64-linux-gnu/libz.so.1.2.11 /usr/glibc-compat/lib/
 
-ARG GLIBC_VERSION="2.30-r0"
 # Install required dependencies
 RUN apk add --no-cache bash git unzip wget && \
     wget -q "https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub" -O /etc/apk/keys/sgerrand.rsa.pub && \
-    wget -q "https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk" -O /tmp/glibc.apk && \
-    wget -q "https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk" -O /tmp/glibc-bin.apk && \
+    for pkg in "${GLIBC_PKGS}"; do wget -q "${GLIBC_REPO}/${pkg}" -O "/tmp/${pkg}"; done && \
     apk add --no-cache /tmp/glibc.apk /tmp/glibc-bin.apk && \
     apk add --virtual .rundeps $runDeps && \
     rm -rf /tmp/* && \
