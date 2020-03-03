@@ -1,0 +1,20 @@
+name: Build Docker
+on:
+  pull_request:
+    branches:
+      - master
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests
+        run: |
+          if [ -f docker-compose.test.yml ]; then
+            docker-compose --file docker-compose.test.yml build
+            docker-compose --file docker-compose.test.yml run sut
+          else
+            docker build . --file openjdk/Dockerfile
+          fi
+      # - name: Build the Docker image
+      #   run: docker build . --file openjdk/Dockerfile --tag openjdk:$(date +%s)
