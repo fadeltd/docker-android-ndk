@@ -2,7 +2,8 @@ ARG ALPINE_VERSION="3.11.3"
 ARG ALPINE_IMAGE=alpine:${ALPINE_VERSION}
 FROM ${ALPINE_IMAGE}
 
-ENV JAVA_HOME /opt/openjdk-8
+# ENV JAVA_HOME /opt/openjdk-8
+ENV JAVA_HOME /usr/lib/openjdk-8
 ENV PATH $JAVA_HOME/bin:$PATH
 
 # https://adoptopenjdk.net/upstream.html
@@ -29,6 +30,7 @@ RUN set -eux; \
     echo $PATH; \
     ls -l $JAVA_HOME; \
     ls -l $JAVA_HOME/bin; \
+	$JAVA_HOME/bin/java -v; \
 	# java -Xshare:dump; \
 # java smoke test
 	java --version; \

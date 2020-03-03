@@ -3,6 +3,8 @@ on:
   pull_request:
     branches:
       - master
+env:
+  DOCKERFILES: openjdk;
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -14,7 +16,9 @@ jobs:
             docker-compose --file docker-compose.test.yml build
             docker-compose --file docker-compose.test.yml run sut
           else
-            docker build . --file openjdk/Dockerfile
+            IFS=';'
+            for LOCATION in $DOCKERFILES; do
+              echo "${LOCATION}/Dockerfile"
+              docker build . --file "${LOCATION}/Dockerfile"
+            done
           fi
-      # - name: Build the Docker image
-      #   run: docker build . --file openjdk/Dockerfile --tag openjdk:$(date +%s)
