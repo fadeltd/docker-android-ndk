@@ -34,6 +34,7 @@ RUN set -eux && \
     curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" -o /tmp/openjdk.tgz \
       http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_HASH}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz && \
     export JAVA_PACKAGE_SHA256=$(curl -sSL https://www.oracle.com/webfolder/s/digest/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}checksum.html | grep -E "${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64\.tar\.gz" | grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
+    sha256sum /tmp/openjdk.tgz && \
     echo "${JAVA_PACKAGE_SHA256} /tmp/openjdk.tgz" | sha256sum -c && \
     gunzip /tmp/openjdk.tgz && \
     tar -C /opt -xf /tmp/java.tar && \
