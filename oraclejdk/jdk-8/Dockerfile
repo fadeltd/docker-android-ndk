@@ -30,22 +30,15 @@ RUN set -eux; \
     sha256sum "${JAVA_TMP}"; \
     JAVA_PACKAGE_SHA256=$(curl -sSL "${JAVA_CHECKSUM}" | grep -E "${JAVA_ASSET}" | grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
     echo "${JAVA_PACKAGE_SHA256}  ${JAVA_TMP}" | sha256sum -c && \
-	# echo "${JAVA_PACKAGE_SHA256}  ${JAVA_TMP}" > "${JAVA_TMP_SHA}"; \
-    # sha256sum -c "${JAVA_TMP_SHA}" && \
-    mkdir -p "$JAVA_HOME"; \
+	mkdir -p "$JAVA_HOME"; \
 	tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
 	rm "${JAVA_TMP}"; \
-	# rm "${JAVA_TMP} ${JAVA_TMP_SHA}"; \
-	cd "${JAVA_HOME}/bin"; \
-	echo "${PATH}"; \
-    ls -lp; \
-	chmod +x java; \
-	./java --version; \
+	echo "${PATH}" && cd "${JAVA_HOME}/bin" && ls -lp && java -version && chmod +x java && ./java -version; \
 	# java -Xshare:dump; \
 	apk del --no-network .java-deps; \
 # java smoke test
-	java --version; \
-	javac --version
+	java -version; \
+	javac -version
 
 # https://docs.oracle.com/javase/10/tools/jshell.htm
 # https://docs.oracle.com/javase/10/jshell/
