@@ -4,7 +4,7 @@ ARG ALPINE_IMAGE=alpine:${ALPINE_VERSION}
 FROM ${ALPINE_IMAGE}
 
 LABEL maintainer="Fadel Trivandi Dipantara <fadeltd@hotmail.com>"
-LABEL description="Alpine 3.11 Oracle JDK 8"
+LABEL description="Alpine 3.11.3 Oracle JDK 8u241"
 
 # https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
 # Java™ Platform Standard Edition Development Kit (JDK™).
@@ -15,9 +15,6 @@ ARG JAVA_MINOR_VERSION="241"
 ARG JAVA_BUILD_VERSION="b07"
 ARG JAVA_VERSION="${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}"
 ARG JAVA_ARCH="linux-x64"
-# ARG JAVA_ORACLE_AUTH="1f5b5a70bf22433b84d0e960903adac8"
-# ARG JAVA_PACKAGE="server-jre"
-# ARG JAVA_BASE_URL="http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}-${JAVA_BUILD_VERSION}/${JAVA_ORACLE_AUTH}"
 ARG JAVA_ORACLE_AUTH="1f5b5a70bf22433b84d0e960903adac8"
 ARG JAVA_PACKAGE="jdk"
 ARG JAVA_BASE_URL="https://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}-${JAVA_BUILD_VERSION}/${JAVA_ORACLE_AUTH}"
@@ -30,7 +27,6 @@ ARG JAVA_JVM_PATH="/usr/lib/jvm"
 ARG JAVA_JDK="java-1.8-oracle"
 ENV JAVA_HOME "${JAVA_JVM_PATH}/${JAVA_JDK}"
 ENV PATH $PATH:$JAVA_HOME/bin
-# ENV PATH $PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
 
 ARG GLIBC_VERSION="2.30-r0"
 ARG GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc"
@@ -55,14 +51,9 @@ RUN set -eux; \
 	mkdir -p "${JAVA_HOME}"; \
     tar --extract --file "${JAVA_TMP}" --directory "${JAVA_HOME}" --strip-components 1; \
 	ln -s "$JAVA_HOME/bin/"* "/usr/bin/"; \
-	ls -lp "${JAVA_JVM_PATH}"; \
 # Clean up
 	apk del glibc-i18n; \
 	apk del --no-network .java-deps; \
-	# ls -lp "${JAVA_HOME}/jre/bin"; \
-	# ls -lp "${JAVA_HOME}/jre/lib"; \
-	# ls -lp "${JAVA_HOME}/jre/lib/amd64"; \
-	# ls -lp "${JAVA_HOME}/jre/lib/ext"; \
 	# find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
 	rm -rf \
 		/tmp/* /var/cache/apk/*; \
