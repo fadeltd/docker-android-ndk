@@ -134,5 +134,7 @@ RUN mkdir -p "$GEM_HOME" && chmod 777 "$GEM_HOME"
 CMD [ "irb" ]
 
 WORKDIR /home/ruby
-COPY Gemfile /home/ruby/Gemfile
+COPY Gemfile /Gemfile
 RUN bundle install
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
