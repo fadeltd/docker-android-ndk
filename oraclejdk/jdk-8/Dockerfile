@@ -42,7 +42,7 @@ RUN set -eux; \
 	apk -U upgrade; \
     apk add --no-cache --virtual .java-deps libstdc++ curl; \
 # Required glibc dependencies
-	for pkg in "${GLIBC_PACKAGES}"; do wget -O "/tmp/${pkg}" "${GLIBC_DOWNLOAD}/${pkg}"; done && \
+	for pkg in ${GLIBC_PACKAGES}; do wget -O "/tmp/${pkg}" "${GLIBC_DOWNLOAD}/${pkg}"; done && \
 	apk add --allow-untrusted /tmp/*.apk && \
     rm -v /tmp/*.apk; \
     ( ${GLIBC_PATH}/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8 || true ); \
