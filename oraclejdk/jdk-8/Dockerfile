@@ -61,35 +61,36 @@ RUN set -eux; \
 	find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
 	apk del glibc-i18n; \
 	apk del --no-network .java-deps; \
-	ls -lp "${JAVA_HOME}/jre/bin"; \
-	ls -lp "${JAVA_HOME}/jre/lib"; \
-	ls -lp "${JAVA_HOME}/jre/lib/amd64"; \
-	ls -lp "${JAVA_HOME}/jre/lib/ext"; \
-	rm -rf	$JAVA_HOME/jre/bin/javaws \
-			$JAVA_HOME/jre/bin/jjs \
-			$JAVA_HOME/jre/bin/orbd \
-			$JAVA_HOME/jre/bin/pack200 \
-			$JAVA_HOME/jre/bin/policytool \
-			$JAVA_HOME/jre/bin/rmid \
-			$JAVA_HOME/jre/bin/rmiregistry \
-			$JAVA_HOME/jre/bin/servertool \
-			$JAVA_HOME/jre/bin/tnameserv \
-			$JAVA_HOME/jre/bin/unpack200 \
-			$JAVA_HOME/jre/lib/*javafx* \
-			$JAVA_HOME/jre/lib/*jfx* \
-			$JAVA_HOME/jre/lib/amd64/libdecora_sse.so \
-			$JAVA_HOME/jre/lib/amd64/libfxplugins.so \
-			$JAVA_HOME/jre/lib/amd64/libglass.so \
-			$JAVA_HOME/jre/lib/amd64/libgstreamer-lite.so \
-			$JAVA_HOME/jre/lib/amd64/libjavafx*.so \
-			$JAVA_HOME/jre/lib/amd64/libjfx*.so \
-			$JAVA_HOME/jre/lib/deploy* \
-			$JAVA_HOME/jre/lib/ext/jfxrt.jar \
-			$JAVA_HOME/jre/lib/ext/nashorn.jar \
-			$JAVA_HOME/jre/lib/javaws.jar \
-			$JAVA_HOME/jre/lib/jfr.jar \
-			$JAVA_HOME/jre/lib/plugin.jar \
-			/tmp/* /var/cache/apk/*; \
+	# ls -lp "${JAVA_HOME}/jre/bin"; \
+	# ls -lp "${JAVA_HOME}/jre/lib"; \
+	# ls -lp "${JAVA_HOME}/jre/lib/amd64"; \
+	# ls -lp "${JAVA_HOME}/jre/lib/ext"; \
+	rm -rf \
+		# $JAVA_HOME/jre/bin/javaws \
+		# $JAVA_HOME/jre/bin/jjs \
+		# $JAVA_HOME/jre/bin/orbd \
+		# $JAVA_HOME/jre/bin/pack200 \
+		# $JAVA_HOME/jre/bin/policytool \
+		# $JAVA_HOME/jre/bin/rmid \
+		# $JAVA_HOME/jre/bin/rmiregistry \
+		# $JAVA_HOME/jre/bin/servertool \
+		# $JAVA_HOME/jre/bin/tnameserv \
+		# $JAVA_HOME/jre/bin/unpack200 \
+		# $JAVA_HOME/jre/lib/*javafx* \
+		# $JAVA_HOME/jre/lib/*jfx* \
+		# $JAVA_HOME/jre/lib/amd64/libdecora_sse.so \
+		# $JAVA_HOME/jre/lib/amd64/libfxplugins.so \
+		# $JAVA_HOME/jre/lib/amd64/libglass.so \
+		# $JAVA_HOME/jre/lib/amd64/libgstreamer-lite.so \
+		# $JAVA_HOME/jre/lib/amd64/libjavafx*.so \
+		# $JAVA_HOME/jre/lib/amd64/libjfx*.so \
+		# $JAVA_HOME/jre/lib/deploy* \
+		# $JAVA_HOME/jre/lib/ext/jfxrt.jar \
+		# $JAVA_HOME/jre/lib/ext/nashorn.jar \
+		# $JAVA_HOME/jre/lib/javaws.jar \
+		# $JAVA_HOME/jre/lib/jfr.jar \
+		# $JAVA_HOME/jre/lib/plugin.jar \
+		/tmp/* /var/cache/apk/*; \
 # Java smoke test
 	which java; \
 	java -version; \
