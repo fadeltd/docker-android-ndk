@@ -34,7 +34,8 @@ RUN set -eux; \
     # sha256sum -c "${JAVA_TMP_SHA}" && \
     mkdir -p "$JAVA_HOME"; \
 	tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
-	rm "${JAVA_TMP} ${JAVA_TMP_SHA}"; \
+	rm "${JAVA_TMP}"; \
+	# rm "${JAVA_TMP} ${JAVA_TMP_SHA}"; \
 	cd "${JAVA_HOME}/bin"; \
 	echo "${PATH}"; \
     ls -lp; \
