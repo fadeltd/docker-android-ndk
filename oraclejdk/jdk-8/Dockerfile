@@ -10,8 +10,10 @@ LABEL description="Alpine 3.11 Oracle JDK 8"
 # Java™ Platform Standard Edition Development Kit (JDK™).
 # The JDK is a development environment for building applications, applets, and components using the Java programming language.
 # The JDK includes tools useful for developing and testing programs written in the Java programming language and running on the Java platform.
-ARG JAVA_VERSION="8u241"
+ARG JAVA_MAJOR_VERSION="8"
+ARG JAVA_MINOR_VERSION="241"
 ARG JAVA_BUILD_VERSION="b07"
+ARG JAVA_VERSION="${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}"
 ARG JAVA_ARCH="linux-x64"
 ARG JAVA_HASH="1f5b5a70bf22433b84d0e960903adac8"
 ARG JAVA_PACKAGE="server-jre"
@@ -36,12 +38,13 @@ RUN set -eux; \
     echo "${JAVA_PACKAGE_SHA256}  ${JAVA_TMP}" | sha256sum -c && \
 	mkdir -p "$JAVA_HOME"; \
     # tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
-	gunzip "${JAVA_TMP}" && tar -C "${JAVA_JVM_PATH}" -xf /tmp/java.tar && \
+	ls -lp /tmp/; \
+	gunzip "${JAVA_TMP}" && tar -C "${JAVA_JVM_PATH}" -xf /tmp/openjdk.tar; \
 	ls -lp "${JAVA_JVM_PATH}}"; \
-	ln -s "${JAVA_JVM_PATH}/jdk1.${JAVA_VERSION_MAJOR}.0_${JAVA_VERSION_MINOR}" "${JAVA_HOME}"; \
-	echo $(find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs) && \
+	ln -s "${JAVA_JVM_PATH}/jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_MMINOR_VERSION}" "${JAVA_HOME}"; \
+	echo $(find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs); \
 	find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
-    ln -s "${JAVA_HOME}/jre/bin" "${JAVA_HOME}/bin" && \
+    ln -s "${JAVA_HOME}/jre/bin" "${JAVA_HOME}/bin"; \
 	rm -rf /tmp/* /var/cache/apk/*; \
 	apk del --no-network .java-deps; \
 	# chown -R root:root ${JAVA_HOME}; \
