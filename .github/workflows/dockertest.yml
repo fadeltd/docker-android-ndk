@@ -4,7 +4,7 @@ on:
     branches:
       - master
 env:
-  DOCKERFILES: oraclejdk/jdk-8;
+  DOCKERFILES: oraclejdk/jdk-8;openjdk/jdk-8;
 jobs:
   test:
     runs-on: ubuntu-latest

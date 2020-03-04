@@ -22,8 +22,9 @@ ARG JAVA_CHECKSUM="https://www.oracle.com/webfolder/s/digest/${JAVA_VERSION}chec
 ARG JAVA_TMP="/tmp/openjdk.tgz"
 ARG JAVA_TMP_SHA="${JAVA_TMP}.sha256"
 
+ARG JAVA_JVM_PATH="/usr/lib/jvm"
 ARG JAVA_JDK="java-1.8-openjdk"
-ENV JAVA_HOME /usr/lib/jvm/${JAVA_JDK}
+ENV JAVA_HOME "${JAVA_JVM_PATH}/${JAVA_JDK}"
 # ENV JAVA_HOME /opt/jdk
 ENV PATH $PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
 
@@ -34,18 +35,25 @@ RUN set -eux; \
     JAVA_PACKAGE_SHA256=$(curl -sSL "${JAVA_CHECKSUM}" | grep -E "${JAVA_ASSET}" | grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
     echo "${JAVA_PACKAGE_SHA256}  ${JAVA_TMP}" | sha256sum -c && \
 	mkdir -p "$JAVA_HOME"; \
-	tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
-	rm "${JAVA_TMP}"; \
+    # tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
+	gunzip "${JAVA_TMP}" && tar -C "${JAVA_JVM_PATH}" -xf /tmp/java.tar && \
+	ls -lp "${JAVA_JVM_PATH}}"; \
+	ln -s "${JAVA_JVM_PATH}/jdk1.${JAVA_VERSION_MAJOR}.0_${JAVA_VERSION_MINOR}" "${JAVA_HOME}"; \
+	echo $(find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs) && \
+	find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
+    ln -s "${JAVA_HOME}/jre/bin" "${JAVA_HOME}/bin" && \
+	rm -rf /tmp/* /var/cache/apk/*; \
 	apk del --no-network .java-deps; \
-	chown -R root:root ${JAVA_HOME}; \
-	ls -l "${JAVA_HOME}/bin"; \
+	# chown -R root:root ${JAVA_HOME}; \
 # Java smoke test
 	which java; \
 	which javac; \
-	if [[ -f "${JAVA_HOME}/bin/java" && -x $(realpath "${JAVA_HOME}/bin/java") ]]; then echo 'executable'; else echo 'not executable'; fi; \
+	ls -lp "/opt/"; \
+	ls -lp "/usr/lib/jvm/"; \
+	ls -lp "${JAVA_HOME}"; \
 	ls -lp "${JAVA_HOME}/bin"; \
-	ls -lp "/usr/bin"; \
-	ln -s "${JAVA_HOME}/bin/" "/usr/bin"; \
+	ln -s "${JAVA_HOME}/bin/java" "/usr/bin"; \
+	ln -s "${JAVA_HOME}/bin/javac" "/usr/bin"; \
 	ls -lp "/usr/bin"; \
 	java -version; \
 	javac -version
