@@ -34,8 +34,8 @@ RUN set -eux && \
 	ls -lp ${JAVA_DEFAULT_JVM_PATH}; \
 	ls -lp ${JAVA_DEFAULT_JVM_PATH}/bin; \
 	ls -lp ${JAVA_DEFAULT_JVM_PATH}/jre; \
-	ls -lp ${JAVA_DEFAULT_JVM_PATH}/jre/bin \
-	mv "${JAVA_DEFAULT_JVM_PATH}" "${JAVA_HOME}" \
+	ls -lp ${JAVA_DEFAULT_JVM_PATH}/jre/bin; \
+	mv "${JAVA_DEFAULT_JVM_PATH}" "${JAVA_HOME}"; \
 # Java smoke test
 	which java; \
 	java -version;
