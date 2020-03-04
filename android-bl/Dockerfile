@@ -4,11 +4,11 @@ RUN apk add --no-cache \
 # 		bash \
 # 		build-base \
 # 		git \
-		make
+        libcurl \
+#		make
 
 WORKDIR /home/ruby
 COPY Gemfile Gemfile.lock ./
-RUN make -v; \
+RUN (gem install curb -v '0.9.10' || true); \
     (bundle install || true); \
-    cat /usr/local/bundle/extensions/x86_64-linux-musl/2.7.0/curb-0.9.10/mkmf.log; \
-    gem install curb -v '0.9.10'
+    (make -v || true)
