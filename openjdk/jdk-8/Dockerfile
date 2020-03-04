@@ -34,7 +34,7 @@ RUN set -eux; \
 	# Install glibc dependencies
 	for pkg in ${GLIBC_PACKAGES}; do \
 		wget -O "/tmp/${pkg}" "${GLIBC_DOWNLOAD}/${pkg}"; \
-		apk add --no-cache "/tmp/${pkg}"; \
+		apk add --allow-untrusted --no-cache "/tmp/${pkg}"; \
 	done && \
 	# Install java from openjdk8-upstream-binaries
     wget -O "${JAVA_TMP}" "${JAVA_ASSET_URL}"; \
