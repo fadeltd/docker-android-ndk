@@ -27,19 +27,17 @@ RUN set -eux; \
 	apk -U upgrade; \
     apk add --no-cache --virtual .java-deps curl; \
 	wget -O "${JAVA_TMP}" "--header=Cookie: oraclelicense=accept-securebackup-cookie" "${JAVA_ASSET_URL}" && \
-    sha256sum "${JAVA_TMP}"; \
     JAVA_PACKAGE_SHA256=$(curl -sSL "${JAVA_CHECKSUM}" | grep -E "${JAVA_ASSET}" | grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
     echo "${JAVA_PACKAGE_SHA256}  ${JAVA_TMP}" | sha256sum -c && \
 	mkdir -p "$JAVA_HOME"; \
 	tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
 	rm "${JAVA_TMP}"; \
-	echo "${PATH}" && ls -lp "${JAVA_HOME}" && ls -lp "${JAVA_HOME}/bin" && ls -lp "${JAVA_HOME}/jre" && ls -lp "${JAVA_HOME}/jre/bin"; \
-	# java -Xshare:dump; \
+	# echo "${PATH}" && ls -lp "${JAVA_HOME}" && ls -lp "${JAVA_HOME}/bin" && ls -lp "${JAVA_HOME}/jre" && ls -lp "${JAVA_HOME}/jre/bin"; \
 	apk del --no-network .java-deps; \
-# java smoke test
+# Java smoke test
 	which java; \
-	java -version; \
 	which javac; \
+	java -version; \
 	javac -version
 
 # https://docs.oracle.com/javase/10/tools/jshell.htm
