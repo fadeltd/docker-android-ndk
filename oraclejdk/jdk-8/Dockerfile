@@ -45,7 +45,7 @@ RUN set -eux; \
 	for pkg in ${GLIBC_PACKAGES}; do wget -O "/tmp/${pkg}" "${GLIBC_DOWNLOAD}/${pkg}"; done && \
 	apk add --allow-untrusted /tmp/*.apk && \
     rm -v /tmp/*.apk; \
-    # ( ${GLIBC_PATH}/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8; || true ); \
+    ( ${GLIBC_PATH}/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8; || true ); \
     echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh; \
     ${GLIBC_PATH}/sbin/ldconfig /lib ${GLIBC_PATH}/lib; \
     echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf; \
@@ -61,49 +61,39 @@ RUN set -eux; \
 	find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
 	apk del glibc-i18n; \
 	apk del --no-network .java-deps; \
-	if ls $JAVA_HOME/*src.zip; then echo "rm -rf $JAVA_HOME/*src.zip"; fi; \
-	if test -f $JAVA_HOME/jre/bin/javaws; then echo "rm -rf $JAVA_HOME/jre/bin/javaws"; fi; \
-	if test -f $JAVA_HOME/jre/bin/jjs; then echo "rm -rf $JAVA_HOME/jre/bin/jjs"; fi; \
-	if test -f $JAVA_HOME/jre/bin/keytool; then echo "rm -rf $JAVA_HOME/jre/bin/keytool"; fi; \
-	if test -f $JAVA_HOME/jre/bin/orbd; then echo "rm -rf $JAVA_HOME/jre/bin/orbd"; fi; \
-	if test -f $JAVA_HOME/jre/bin/pack200; then echo "rm -rf $JAVA_HOME/jre/bin/pack200"; fi; \
-	if test -f $JAVA_HOME/jre/bin/policytool; then echo "rm -rf $JAVA_HOME/jre/bin/policytool"; fi; \
-	if test -f $JAVA_HOME/jre/bin/rmid; then echo "rm -rf $JAVA_HOME/jre/bin/rmid"; fi; \
-	if test -f $JAVA_HOME/jre/bin/rmiregistry; then echo "rm -rf $JAVA_HOME/jre/bin/rmiregistry"; fi; \
-	if test -f $JAVA_HOME/jre/bin/servertool; then echo "rm -rf $JAVA_HOME/jre/bin/servertool"; fi; \
-	if test -f $JAVA_HOME/jre/bin/tnameserv; then echo "rm -rf $JAVA_HOME/jre/bin/tnameserv"; fi; \
-	if test -f $JAVA_HOME/jre/bin/unpack200; then echo "rm -rf $JAVA_HOME/jre/bin/unpack200"; fi; \
-	if ls $JAVA_HOME/jre/lib/*javafx*; then echo "rm -rf $JAVA_HOME/jre/lib/*javafx*"; fi; \
-	if ls $JAVA_HOME/jre/lib/*jfx*; then echo "rm -rf $JAVA_HOME/jre/lib/*jfx*"; fi; \
-	if test -f $JAVA_HOME/jre/lib/amd64/libdecora_sse.so; then echo "rm -rf $JAVA_HOME/jre/lib/amd64/libdecora_sse.so"; fi; \
-	if test -f $JAVA_HOME/jre/lib/amd64/libfxplugins.so; then echo "rm -rf $JAVA_HOME/jre/lib/amd64/libfxplugins.so"; fi; \
-	if test -f $JAVA_HOME/jre/lib/amd64/libglass.so; then echo "rm -rf $JAVA_HOME/jre/lib/amd64/libglass.so"; fi; \
-	if test -f $JAVA_HOME/jre/lib/amd64/libgstreamer-lite.so; then echo "rm -rf $JAVA_HOME/jre/lib/amd64/libgstreamer-lite.so"; fi; \
-	if ls $JAVA_HOME/jre/lib/amd64/libjavafx*.so; then echo "rm -rf $JAVA_HOME/jre/lib/amd64/libjavafx*.so"; fi; \
-	if ls $JAVA_HOME/jre/lib/amd64/libjfx*.so; then echo "rm -rf $JAVA_HOME/jre/lib/amd64/libjfx*.so"; fi; \
-	if ls $JAVA_HOME/jre/lib/amd64/libprism_*.so; then echo "rm -rf $JAVA_HOME/jre/lib/amd64/libprism_*.so"; fi; \
-	if ls $JAVA_HOME/jre/lib/deploy*; then echo "rm -rf $JAVA_HOME/jre/lib/deploy*"; fi; \
-	if test -f $JAVA_HOME/jre/lib/desktop; then echo "rm -rf $JAVA_HOME/jre/lib/desktop"; fi; \
-	if test -f $JAVA_HOME/jre/lib/ext/jfxrt.jar; then echo "rm -rf $JAVA_HOME/jre/lib/ext/jfxrt.jar"; fi; \
-	if test -f $JAVA_HOME/jre/lib/ext/nashorn.jar; then echo "rm -rf $JAVA_HOME/jre/lib/ext/nashorn.jar"; fi; \
-	if test -f $JAVA_HOME/jre/lib/javaws.jar; then echo "rm -rf $JAVA_HOME/jre/lib/javaws.jar"; fi; \
-	if test -f $JAVA_HOME/jre/lib/jfr; then echo "rm -rf $JAVA_HOME/jre/lib/jfr"; fi; \
-	if test -f $JAVA_HOME/jre/lib/jfr.jar; then echo "rm -rf $JAVA_HOME/jre/lib/jfr.jar"; fi; \
-	if test -f $JAVA_HOME/jre/lib/oblique-fonts; then echo "rm -rf $JAVA_HOME/jre/lib/oblique-fonts"; fi; \
-	if test -f $JAVA_HOME/jre/lib/plugin.jar; then echo "rm -rf $JAVA_HOME/jre/lib/plugin.jar"; fi; \
-	if test -f $JAVA_HOME/jre/plugin; then echo "rm -rf $JAVA_HOME/jre/plugin"; fi; \
-	if ls $JAVA_HOME/lib/*javafx*; then echo "rm -rf $JAVA_HOME/lib/*javafx*"; fi; \
-	if test -f $JAVA_HOME/lib/missioncontrol; then echo "rm -rf $JAVA_HOME/lib/missioncontrol"; fi; \
-	if test -f $JAVA_HOME/lib/visualvm; then echo "rm -rf $JAVA_HOME/lib/visualvm"; fi; \
-	rm -rf \
+	ls -lp "${JAVA_HOME}/jre/bin"; \
+	ls -lp "${JAVA_HOME}/jre/lib"; \
+	ls -lp "${JAVA_HOME}/jre/lib/amd64"; \
+	ls -lp "${JAVA_HOME}/jre/lib/ext"; \
+	rm -rf	$JAVA_HOME/jre/bin/javaws \
+			$JAVA_HOME/jre/bin/jjs \
+			$JAVA_HOME/jre/bin/orbd \
+			$JAVA_HOME/jre/bin/pack200 \
+			$JAVA_HOME/jre/bin/policytool \
+			$JAVA_HOME/jre/bin/rmid \
+			$JAVA_HOME/jre/bin/rmiregistry \
+			$JAVA_HOME/jre/bin/servertool \
+			$JAVA_HOME/jre/bin/tnameserv \
+			$JAVA_HOME/jre/bin/unpack200 \
+			$JAVA_HOME/jre/lib/*javafx* \
+			$JAVA_HOME/jre/lib/*jfx* \
+			$JAVA_HOME/jre/lib/amd64/libdecora_sse.so \
+			$JAVA_HOME/jre/lib/amd64/libfxplugins.so \
+			$JAVA_HOME/jre/lib/amd64/libglass.so \
+			$JAVA_HOME/jre/lib/amd64/libgstreamer-lite.so \
+			$JAVA_HOME/jre/lib/amd64/libjavafx*.so \
+			$JAVA_HOME/jre/lib/amd64/libjfx*.so \
+			$JAVA_HOME/jre/lib/deploy* \
+			$JAVA_HOME/jre/lib/ext/jfxrt.jar \
+			$JAVA_HOME/jre/lib/ext/nashorn.jar \
+			$JAVA_HOME/jre/lib/javaws.jar \
+			$JAVA_HOME/jre/lib/jfr.jar \
+			$JAVA_HOME/jre/lib/plugin.jar \
 			/tmp/* /var/cache/apk/*; \
 # Java smoke test
 	which java; \
 	java -version; \
 	which javac; \
-	ls -lp "${JAVA_HOME}/lib"; \
-	ls -lp "${JAVA_HOME}/jre/bin"; \
-	ls -lp "${JAVA_HOME}/jre/lib"; \
 	javac -version
 
 # https://docs.oracle.com/javase/10/tools/jshell.htm
