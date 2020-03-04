@@ -44,7 +44,6 @@ RUN set -eux; \
 # Required glibc dependencies
 	for pkg in ${GLIBC_PACKAGES}; do wget -O "/tmp/${pkg}" "${GLIBC_DOWNLOAD}/${pkg}"; done && \
 	apk add --allow-untrusted /tmp/*.apk && \
-    rm -v /tmp/*.apk; \
     ( ${GLIBC_PATH}/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8 || true ); \
     echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh; \
     ${GLIBC_PATH}/sbin/ldconfig /lib ${GLIBC_PATH}/lib; \
@@ -58,14 +57,15 @@ RUN set -eux; \
 	ln -s "$JAVA_HOME/bin/"* "/usr/bin/"; \
 	ls -lp "${JAVA_JVM_PATH}"; \
 # Clean up
-	find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
 	apk del glibc-i18n; \
 	apk del --no-network .java-deps; \
 	# ls -lp "${JAVA_HOME}/jre/bin"; \
 	# ls -lp "${JAVA_HOME}/jre/lib"; \
 	# ls -lp "${JAVA_HOME}/jre/lib/amd64"; \
 	# ls -lp "${JAVA_HOME}/jre/lib/ext"; \
+	# find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
 	rm -rf \
+		/tmp/* /var/cache/apk/*; \
 		# $JAVA_HOME/jre/bin/javaws \
 		# $JAVA_HOME/jre/bin/jjs \
 		# $JAVA_HOME/jre/bin/orbd \
@@ -90,7 +90,6 @@ RUN set -eux; \
 		# $JAVA_HOME/jre/lib/javaws.jar \
 		# $JAVA_HOME/jre/lib/jfr.jar \
 		# $JAVA_HOME/jre/lib/plugin.jar \
-		/tmp/* /var/cache/apk/*; \
 # Java smoke test
 	which java; \
 	java -version; \
