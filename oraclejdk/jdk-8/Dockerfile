@@ -45,7 +45,7 @@ RUN set -eux; \
 	if [[ -f "${JAVA_HOME}/bin/java" && -x $(realpath "${JAVA_HOME}/bin/java") ]]; then echo 'executable'; else echo 'not executable'; fi; \
 	ls -lp "${JAVA_HOME}/bin"; \
 	ls -lp "/usr/bin"; \
-	ln -s "${JAVA_HOME}/bin" "/usr/bin"; \
+	ln -s "${JAVA_HOME}/bin/" "/usr/bin"; \
 	ls -lp "/usr/bin"; \
 	java -version; \
 	javac -version
