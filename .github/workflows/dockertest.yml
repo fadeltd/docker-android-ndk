@@ -22,8 +22,7 @@ jobs:
               echo "Running Build Test for ${LOCATION}"
               # docker build --no-cache -f "${LOCATION}" .
               cd $LOCATION
-              docker build --no-cache -t $LOCATION -f Dockerfile .
+              docker build --no-cache -f Dockerfile .
               echo -e "Build ${LOCATION} Success!\n"
-              docker run -it $LOCATION
             done
           fi
