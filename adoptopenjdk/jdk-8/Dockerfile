@@ -25,16 +25,16 @@ ARG JAVA_JDK="java-1.8-openjdk"
 ENV JAVA_HOME "${JAVA_JVM_PATH}/${JAVA_JDK}"
 ENV PATH $PATH:$JAVA_HOME/bin
 
-# ARG GLIBC_VERSION="2.30-r0"
-# ARG GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc"
-# ARG GLIBC_DOWNLOAD="${GLIBC_REPO}/releases/download/${GLIBC_VERSION}"
-# ARG GLIBC_PACKAGES="glibc-${GLIBC_VERSION}.apk glibc-bin-${GLIBC_VERSION}.apk glibc-i18n-${GLIBC_VERSION}.apk"
-# ARG GLIBC_PATH="/usr/glibc-compat"
+ARG GLIBC_VERSION="2.30-r0"
+ARG GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc"
+ARG GLIBC_DOWNLOAD="${GLIBC_REPO}/releases/download/${GLIBC_VERSION}"
+ARG GLIBC_PACKAGES="glibc-${GLIBC_VERSION}.apk glibc-bin-${GLIBC_VERSION}.apk glibc-i18n-${GLIBC_VERSION}.apk"
+ARG GLIBC_PATH="/usr/glibc-compat"
 
 RUN set -eux; \
 # Required glibc dependencies
-	# for pkg in ${GLIBC_PACKAGES}; do wget -O "/tmp/${pkg}" "${GLIBC_DOWNLOAD}/${pkg}"; done && \
-	# apk add --allow-untrusted /tmp/*.apk && \
+	for pkg in ${GLIBC_PACKAGES}; do wget -O "/tmp/${pkg}" "${GLIBC_DOWNLOAD}/${pkg}"; done && \
+	apk add --allow-untrusted /tmp/*.apk && \
     # ( ${GLIBC_PATH}/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8 || true ); \
     # echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh; \
     # ${GLIBC_PATH}/sbin/ldconfig /lib ${GLIBC_PATH}/lib; \
@@ -45,9 +45,9 @@ RUN set -eux; \
 	# wget -O "${JAVA_TMP}.asc" "${JAVA_SIGN_URL}"; \
 	mkdir -p "${JAVA_HOME}"; \
     tar --extract --file "${JAVA_TMP}" --directory "${JAVA_HOME}" --strip-components 1; \
-	ln -s "$JAVA_HOME/bin/"* "/usr/bin/"; \
+	# ln -s "$JAVA_HOME/bin/"* "/usr/bin/"; \
 # Clean up
-	# apk del glibc-i18n; \
+	apk del glibc-i18n; \
 	rm -rf /tmp/* /var/cache/apk/*; \
 # Java smoke test
 	which java; \
