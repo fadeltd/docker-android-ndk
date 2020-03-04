@@ -27,8 +27,9 @@ ARG JAVA_TMP_SHA="${JAVA_TMP}.sha256"
 ARG JAVA_JVM_PATH="/usr/lib/jvm"
 ARG JAVA_JDK="java-1.8-openjdk"
 ENV JAVA_HOME "${JAVA_JVM_PATH}/${JAVA_JDK}"
+ENV PATH $PATH:$JAVA_HOME/bin
 # ENV JAVA_HOME /opt/jdk
-ENV PATH $PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
+# ENV PATH $PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
 
 RUN set -eux; \
 	apk -U upgrade; \
@@ -39,19 +40,15 @@ RUN set -eux; \
 	mkdir -p "$JAVA_HOME"; \
     tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
 	ls -lp "${JAVA_JVM_PATH}"; \
-	find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
+	# find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
     apk del --no-network .java-deps; \
 	rm -rf /tmp/* /var/cache/apk/*; \
-	chown -R root:root ${JAVA_HOME}; \
+	# chown -R root:root ${JAVA_HOME}; \
 # Java smoke test
 	which java; \
-	which javac; \
-	ln -s "${JAVA_HOME}/bin/java" "/usr/bin"; \
-	ln -s "${JAVA_HOME}/bin/javac" "/usr/bin"; \
-	ln -s "${JAVA_HOME}/bin/keytool" "/usr/bin"; \
-	ls -lp "/usr/bin"; \
-	java; \
 	java -version; \
+	java; \
+	which javac; \
 	javac -version
 
 # https://docs.oracle.com/javase/10/tools/jshell.htm
