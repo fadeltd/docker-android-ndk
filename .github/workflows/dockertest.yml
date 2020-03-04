@@ -4,7 +4,7 @@ on:
     branches:
       - master
 env:
-  DOCKERFILES: android-base;
+  DOCKERFILES: $(find . -name *Dockerfile | tr '\n' ';')
 jobs:
   test:
     runs-on: ubuntu-latest
