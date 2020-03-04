@@ -134,7 +134,5 @@ RUN mkdir -p "$GEM_HOME" && chmod 777 "$GEM_HOME"
 CMD [ "irb" ]
 
 WORKDIR /home/ruby
-
 COPY Gemfile /home/ruby/Gemfile
-
-RUN echo "bundle install"
+RUN bundle install

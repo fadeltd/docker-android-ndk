@@ -21,7 +21,8 @@ jobs:
             for LOCATION in $DOCKERFILES; do
               echo "Running Build Test for ${LOCATION}"
               # docker build --no-cache -f "${LOCATION}" .
-              docker build --no-cache -f "${LOCATION}/Dockerfile" .
+              docker build --no-cache -t $LOCATION -f "${LOCATION}/Dockerfile" .
               echo -e "Build ${LOCATION} Success!\n"
+              docker run -it $LOCATION
             done
           fi
