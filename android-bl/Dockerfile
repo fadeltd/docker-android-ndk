@@ -1,18 +1,18 @@
 FROM fadeltd/alpine-android-ndk-ruby-base
 
 RUN apk --no-cache add --update \
-    # bash \
-    # build-base \
-    # ca-certificates \
-    # coreutils \
-    # curl \
-    # git \
-    # g++ \
-    # libstdc++ \
-    # make \
-    # openssl \
-    # ruby \
-    # ruby-irb \
+    bash \
+    build-base \
+    ca-certificates \
+    coreutils \
+    curl \
+    git \
+    g++ \
+    libstdc++ \
+    make \
+    openssl \
+    ruby \
+    ruby-irb \
     ruby-dev \
     zip
 
