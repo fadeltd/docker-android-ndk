@@ -1,0 +1,30 @@
+source 'https://rubygems.org'
+
+# These gems are in the :default group
+
+group :ci do
+  gem 'badge'
+  gem 'fastlane'
+  plugins_path = File.join(File.dirname(__FILE__), 'fastlane', 'Pluginfile')
+  eval_gemfile(plugins_path) if File.exist?(plugins_path)
+end
+
+group :pr_checker do
+  gem 'danger'
+  gem 'danger-jacoco'
+  gem 'danger-welcome_message'
+end
+
+group :development do
+  gem 'multipart-post'
+  gem 'rubocop'
+end
+
+group :test do
+  gem 'cucumber'
+  gem 'mocha'
+  gem 'rake'
+  gem 'simplecov'
+  gem 'test-unit'
+  gem 'webmock'
+end

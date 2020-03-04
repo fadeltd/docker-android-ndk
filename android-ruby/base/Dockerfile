@@ -1,8 +1,13 @@
 FROM fadeltd/alpine-android-ndk-base
 LABEL description="Alpine Android NDK Base with Latest Ruby"
 
+# Install required dependencies
 RUN apk add --no-cache \
-		gmp-dev
+		bash \
+		build-base \
+		git \
+		gmp-dev	\
+		make
 
 # skip installing gem documentation
 RUN set -eux; \
@@ -15,9 +20,6 @@ RUN set -eux; \
 ENV RUBY_MAJOR 2.7
 ENV RUBY_VERSION 2.7.0
 ENV RUBY_DOWNLOAD_SHA256 27d350a52a02b53034ca0794efe518667d558f152656c2baaf08f3d0c8b02343
-
-# Add make
-RUN apk add --no-cache make
 
 # some of ruby's build scripts are written in ruby
 #   we purge system ruby later to make sure our final image uses what we just built
@@ -130,3 +132,9 @@ ENV PATH $GEM_HOME/bin:$PATH
 RUN mkdir -p "$GEM_HOME" && chmod 777 "$GEM_HOME"
 
 CMD [ "irb" ]
+
+WORKDIR /home/ruby
+
+COPY Gemfile /home/ruby/Gemfile
+
+RUN echo "bundle install"
