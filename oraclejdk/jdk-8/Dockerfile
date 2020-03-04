@@ -33,11 +33,13 @@ RUN set -eux; \
 	mkdir -p "$JAVA_HOME"; \
 	tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
 	rm "${JAVA_TMP}"; \
-	echo "${PATH}" && cd "${JAVA_HOME}" && ls -lp && cd bin && ls -lp \
+	echo "${PATH}" && ls -lp "${JAVA_HOME}" && ls -lp "${JAVA_HOME}/bin" && ls -lp "${JAVA_HOME}/jre" && ls -lp "${JAVA_HOME}/jre/bin"; \
 	# java -Xshare:dump; \
 	apk del --no-network .java-deps; \
 # java smoke test
+	which java; \
 	java -version; \
+	which javac; \
 	javac -version
 
 # https://docs.oracle.com/javase/10/tools/jshell.htm

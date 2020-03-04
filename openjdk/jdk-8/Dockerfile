@@ -34,7 +34,6 @@ RUN set -eux && \
 	apk add --no-cache openjdk8="${JAVA_ALPINE_VERSION}" && \
 	mv "${JAVA_DEFAULT_JVM_PATH}" "${JAVA_HOME}"; \
 # Java smoke test
-	echo ${PATH}; \
 	which java; \
 	java -version; \
 	which javac; \
