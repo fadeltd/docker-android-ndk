@@ -32,8 +32,10 @@ ENV PATH=$PATH:$ANDROID_HOME/cmake/${CMAKE_VERSION}/bin/:$ANDROID_HOME/tools:$AN
 # Install required dependencies
 RUN apk add --no-cache bash git unzip wget && \
     wget -q "https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub" -O /etc/apk/keys/sgerrand.rsa.pub && \
-    for pkg in "${GLIBC_PKGS}"; do wget -q "${GLIBC_REPO}/${pkg}" -O "/tmp/${pkg}"; done && \
-    apk add --no-cache /tmp/glibc.apk /tmp/glibc-bin.apk && \
+    for pkg in "${GLIBC_PKGS}"; do \
+        wget -q "${GLIBC_REPO}/${pkg}" -O "/tmp/${pkg}"; \
+        apk add --no-cache "/tmp/${pkg}"; \
+    done && \
     apk add --virtual .rundeps $runDeps && \
     rm -rf /tmp/* && \
     rm -rf /var/cache/apk/*

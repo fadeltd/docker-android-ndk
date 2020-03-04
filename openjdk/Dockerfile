@@ -4,82 +4,39 @@ FROM ${ALPINE_IMAGE}
 LABEL maintainer="Fadel Trivandi Dipantara <fadeltd@hotmail.com>"
 LABEL description="Alpine 3.11 Open JDK 8"
 
-# Java Version and other ENV
-ENV JAVA_VERSION_MAJOR=8 \
-    JAVA_VERSION_MINOR=241 \
-    JAVA_VERSION_BUILD=07 \
-    JAVA_HASH=1f5b5a70bf22433b84d0e960903adac8 \
-    JAVA_PACKAGE=server-jre \
-    JAVA_PACKAGE_VARIANT=nashorn \
-    JAVA_JCE=standard \
-    # JAVA_HOME=/opt/openjdk_8 \
-    JAVA_HOME=/opt/jdk \
-    PATH=${JAVA_HOME}/bin:${PATH} \
-    GLIBC_REPO=https://github.com/sgerrand/alpine-pkg-glibc \
-    GLIBC_VERSION=2.30-r0 \
-    LANG=C.UTF-8
+ENV JAVA_HOME /opt/jdk
+ENV PATH $JAVA_HOME/bin:$PATH
 
-# Dependencies
-RUN set -eux && \
-    apk -U upgrade && \
-    apk add libstdc++ curl ca-certificates bash java-cacerts && \
-    for pkg in glibc-${GLIBC_VERSION} glibc-bin-${GLIBC_VERSION} glibc-i18n-${GLIBC_VERSION}; do \
-      curl -sSL ${GLIBC_REPO}/releases/download/${GLIBC_VERSION}/${pkg}.apk -o /tmp/${pkg}.apk; \
-    done && \
-    apk add --allow-untrusted /tmp/*.apk && \
-    rm -v /tmp/*.apk && \
-    ( /usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8 || true ) && \
-    echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh && \
-    /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib && \
-    curl -jkSLH "Cookie: oraclelicense=accept-securebackup-cookie" -o /tmp/java.tar.gz http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_HASH}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz && \
-    curl -jkSLH 'Cookie: oraclelicense=accept-securebackup-cookie' -o /tmp/openjdk.tgz http://download.oracle.com/otn-pub/java/jdk/8u241-b07/1f5b5a70bf22433b84d0e960903adac8/server-jre-8u241-linux-x64.tar.gz && \
-    export JAVA_PACKAGE_SHA256=$(curl -sSL https://www.oracle.com/webfolder/s/digest/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}checksum.html | grep -E "${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64\.tar\.gz" | grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
-    ls -l /tmp/ && \
-    sha256sum /tmp/openjdk.tgz && \
-    echo "${JAVA_PACKAGE_SHA256} /tmp/openjdk.tgz" | sha256sum -c && \
-    gunzip /tmp/openjdk.tgz && \
-    tar -C /opt -xf /tmp/java.tar && \
-    ln -s /opt/jdk1.${JAVA_VERSION_MAJOR}.0_${JAVA_VERSION_MINOR} $JAVA_HOME && \
-    find ${JAVA_HOME}/ -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
-    cd ${JAVA_HOME}/ && ln -s ./jre/bin ./bin && \
-    if [ "${JAVA_JCE}" == "unlimited" ]; then echo "Installing Unlimited JCE policy" && \
-      curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" -o /tmp/jce_policy-${JAVA_VERSION_MAJOR}.zip \
-        http://download.oracle.com/otn-pub/java/jce/${JAVA_VERSION_MAJOR}/jce_policy-${JAVA_VERSION_MAJOR}.zip && \
-      cd /tmp && unzip /tmp/jce_policy-${JAVA_VERSION_MAJOR}.zip && \
-      cp -v /tmp/UnlimitedJCEPolicyJDK8/*.jar $JAVA_HOME/jre/lib/security/; \
-    fi && \
-    sed -i s/#networkaddress.cache.ttl=-1/networkaddress.cache.ttl=10/ $JAVA_HOME/jre/lib/security/java.security && \
-    apk del curl glibc-i18n && \
-    rm -rf $JAVA_HOME/jre/plugin \
-           $JAVA_HOME/jre/bin/javaws \
-           $JAVA_HOME/jre/bin/orbd \
-           $JAVA_HOME/jre/bin/pack200 \
-           $JAVA_HOME/jre/bin/policytool \
-           $JAVA_HOME/jre/bin/rmid \
-           $JAVA_HOME/jre/bin/rmiregistry \
-           $JAVA_HOME/jre/bin/servertool \
-           $JAVA_HOME/jre/bin/tnameserv \
-           $JAVA_HOME/jre/bin/unpack200 \
-           $JAVA_HOME/jre/lib/javaws.jar \
-           $JAVA_HOME/jre/lib/deploy* \
-           $JAVA_HOME/jre/lib/desktop \
-           $JAVA_HOME/jre/lib/*javafx* \
-           $JAVA_HOME/jre/lib/*jfx* \
-           $JAVA_HOME/jre/lib/amd64/libdecora_sse.so \
-           $JAVA_HOME/jre/lib/amd64/libprism_*.so \
-           $JAVA_HOME/jre/lib/amd64/libfxplugins.so \
-           $JAVA_HOME/jre/lib/amd64/libglass.so \
-           $JAVA_HOME/jre/lib/amd64/libgstreamer-lite.so \
-           $JAVA_HOME/jre/lib/amd64/libjavafx*.so \
-           $JAVA_HOME/jre/lib/amd64/libjfx*.so \
-           $JAVA_HOME/jre/lib/ext/jfxrt.jar \
-           $JAVA_HOME/jre/lib/oblique-fonts \
-           $JAVA_HOME/jre/lib/plugin.jar \
-           /tmp/* /var/cache/apk/* && \
-    ln -sf /etc/ssl/certs/java/cacerts $JAVA_HOME/jre/lib/security/cacerts && \
-    # java smoke test
-    java --version; \
-    javac --version; \
-    echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf
+# https://adoptopenjdk.net/upstream.html
+# > These binaries are built by Red Hat on their infrastructure on behalf of the OpenJDK jdk8u and jdk11u projects.
+# > The binaries are created from the unmodified source code at OpenJDK.
+# > Although no formal support agreement is provided, please report any bugs you may find to https://bugs.java.com/.
+ARG JAVA_VERSION="8u242"
+ARG JAVA_BUILD_VERSION="b08"
+ARG JAVA_ARCH="x64_linux"
+ARG JAVA_ASSET="OpenJDK8U-jdk_${JAVA_ARCH}_${JAVA_VERSION}${JAVA_BUILD_VERSION}.tar.gz"
+# ARG JAVA_SIGN="${JAVA_ASSET}.sign"
+ARG JAVA_BASE_URL="https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/download/jdk${JAVA_VERSION}-${JAVA_BUILD_VERSION}"
+ARG JAVA_ASSET_URL="${JAVA_BASE_URL}/${JAVA_ASSET}"
+# ARG JAVA_SIGN_URL="${JAVA_BASE_URL}/${JAVA_SIGN}"
 
-# EOF
+RUN set -eux; \
+    # need gnupg to sign this
+	# wget -O /tmp/openjdk.tgz.asc "${JAVA_SIGN_URL}"; \
+	wget -O /tmp/openjdk.tgz "${JAVA_ASSET_URL}"; \
+	mkdir -p "$JAVA_HOME"; \
+	tar --extract --file /tmp/openjdk.tgz --directory "$JAVA_HOME" --strip-components 1; \
+	rm /tmp/openjdk.tgz; \
+	cd $JAVA_HOME/bin; \
+    ls -lp; \
+	chmod +x java; \
+	./java -v; \
+	# java -Xshare:dump; \
+# java smoke test
+	java --version; \
+	javac --version
+
+# https://docs.oracle.com/javase/10/tools/jshell.htm
+# https://docs.oracle.com/javase/10/jshell/
+# https://en.wikipedia.org/wiki/JShell
+CMD ["jshell"]
