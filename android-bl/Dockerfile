@@ -1,7 +1,7 @@
 # FROM ruby:2.7.0-alpine3.11
 FROM fadeltd/alpine-android-ndk-ruby-base
 
-RUN apk --no-cache add --update \
+# RUN apk --no-cache add --update \
     # bash \
     # ca-certificates \
     # coreutils \
