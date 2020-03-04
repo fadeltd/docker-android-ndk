@@ -39,10 +39,9 @@ RUN set -eux; \
 	mkdir -p "$JAVA_HOME"; \
     tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
 	ls -lp "${JAVA_JVM_PATH}"; \
-	echo $(find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs); \
+	find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre \
 	find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
-    echo $(find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs); \
-	ln -s "${JAVA_HOME}/jre/bin" "${JAVA_HOME}/bin"; \
+    ln -s "${JAVA_HOME}/jre/bin" "${JAVA_HOME}/bin"; \
 	rm -rf /tmp/* /var/cache/apk/*; \
 	apk del --no-network .java-deps; \
 	# chown -R root:root ${JAVA_HOME}; \
