@@ -1,11 +1,20 @@
 FROM fadeltd/alpine-android-ndk-ruby-base
 
-RUN apk add --no-cache \
-# 		bash \
-# 		build-base \
-# 		git \
-        libcurl
-#		make
+RUN apk --no-cache add --update \
+#     bash \
+#     build-base \
+#     ca-certificates \
+    coreutils \
+    curl \
+#     git \
+    g++ \
+    libstdc++ \
+#     make \
+    openssl \
+#     ruby \
+#     ruby-irb \
+#     ruby-dev \
+    zip
 
 WORKDIR /home/ruby
 COPY Gemfile Gemfile.lock ./
