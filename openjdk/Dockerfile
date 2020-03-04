@@ -23,8 +23,8 @@ ENV PATH $JAVA_HOME/bin:$PATH
 # Java™ Platform Standard Edition Development Kit (JDK™).
 # The JDK is a development environment for building applications, applets, and components using the Java programming language.
 # The JDK includes tools useful for developing and testing programs written in the Java programming language and running on the Java platform.
-ARG JAVA_VERSION="8u242"
-ARG JAVA_BUILD_VERSION="b08"
+ARG JAVA_VERSION="8u241"
+ARG JAVA_BUILD_VERSION="b07"
 ARG JAVA_ARCH="linux-x64"
 ARG JAVA_HASH="1f5b5a70bf22433b84d0e960903adac8"
 ARG JAVA_PACKAGE="server-jre"
