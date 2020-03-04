@@ -24,7 +24,7 @@ ARG JAVA_BASE_URL="https://download.oracle.com/otn/java/jdk/${JAVA_VERSION}-${JA
 ARG JAVA_ASSET="${JAVA_PACKAGE}-${JAVA_VERSION}-${JAVA_ARCH}.tar.gz"
 ARG JAVA_ASSET_URL="${JAVA_BASE_URL}/${JAVA_ASSET}"
 ARG JAVA_CHECKSUM="https://www.oracle.com/webfolder/s/digest/${JAVA_VERSION}checksum.html"
-ARG JAVA_TMP="/tmp/openjdk.tgz"
+ARG JAVA_TMP="/tmp/oracle-jdk.tgz"
 ARG JAVA_TMP_SHA="${JAVA_TMP}.sha256"
 
 ARG JAVA_JVM_PATH="/usr/lib/jvm"
@@ -39,8 +39,8 @@ RUN set -eux; \
 	wget -O "${JAVA_TMP}" "--header=Cookie: oraclelicense=accept-securebackup-cookie" "${JAVA_ASSET_URL}" && \
     JAVA_PACKAGE_SHA256=$(curl -sSL "${JAVA_CHECKSUM}" | grep -E "${JAVA_ASSET}" | grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
     echo "${JAVA_PACKAGE_SHA256}  ${JAVA_TMP}" | sha256sum -c && \
-	mkdir -p "$JAVA_HOME"; \
-    tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
+	mkdir -p "${JAVA_HOME}"; \
+    tar --extract --file "${JAVA_TMP}" --directory "${JAVA_HOME}" --strip-components 1; \
 	ls -lp "${JAVA_JVM_PATH}"; \
 	# find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
     apk del --no-network .java-deps; \
