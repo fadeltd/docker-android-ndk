@@ -29,16 +29,13 @@ ENV PATH "$PATH:${JAVA_HOME}/jre/bin:${JAVA_HOME}/bin"
 # https://pkgs.alpinelinux.org/package/v3.11/community/x86/openjdk8
 RUN set -eux && \
 	apk add --no-cache openjdk8="${JAVA_ALPINE_VERSION}" && \
-	# echo "${JAVA_HOME}"; \
-	# echo "${PATH}"; \
-	# cat "/usr/local/bin/docker-java-home"; \
-	ls -lp /usr/bin/; \
-	pwd; \
-	ls -lp; \
+	ls -lp /lib/jvm/default-jvm/; \
+	ls -lp /lib/jvm/default-jvm/bin/; \
+	ls -lp /lib/jvm/default-jvm/jre/; \
+	ls -lp /lib/jvm/default-jvm/jre/bin \
+# Java smoke test
 	which java; \
+	java -version;
 	# which javac; \
-	java -version; \
 	# javac -version; \
-	# cat "docker-java-home"; \
 	# [ "$JAVA_HOME" = "$(docker-java-home)" ]
-	cat "docker-java-home";
