@@ -10,7 +10,7 @@ RUN apk --no-cache add --update \
     g++ \
     libstdc++ \
     make \
-    openssl \
+    openssl
     # wget \
     # unzip \
     # zip
