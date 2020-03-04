@@ -4,7 +4,7 @@ RUN apk add --no-cache \
 # 		bash \
 # 		build-base \
 # 		git \
-        libcurl \
+        libcurl
 #		make
 
 WORKDIR /home/ruby
