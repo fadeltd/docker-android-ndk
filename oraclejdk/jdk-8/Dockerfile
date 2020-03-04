@@ -5,7 +5,7 @@ LABEL maintainer="Fadel Trivandi Dipantara <fadeltd@hotmail.com>"
 LABEL description="Alpine 3.11 Open JDK 8"
 
 ENV JAVA_HOME /opt/jdk
-ENV PATH $JAVA_HOME/bin:$PATH
+ENV PATH $PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
 
 # https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
 # Java™ Platform Standard Edition Development Kit (JDK™).
@@ -33,7 +33,7 @@ RUN set -eux; \
 	mkdir -p "$JAVA_HOME"; \
 	tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
 	rm "${JAVA_TMP}"; \
-	echo "${PATH}" && cd "${JAVA_HOME}/bin" && ls -lp && java -version && chmod +x java && ./java -version; \
+	echo "${PATH}" && cd "${JAVA_HOME}" && ls -lp && cd bin && ls -lp \
 	# java -Xshare:dump; \
 	apk del --no-network .java-deps; \
 # java smoke test

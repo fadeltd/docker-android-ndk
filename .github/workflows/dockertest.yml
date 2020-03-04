@@ -19,8 +19,9 @@ jobs:
             # DOCKERFILES=$(find . -name *Dockerfile | tr '\n' ';')
             IFS=';'
             for LOCATION in $DOCKERFILES; do
-              echo "${LOCATION}"
+              echo "Running Build Test for ${LOCATION}"
               # docker build --no-cache -f "${LOCATION}" .
               docker build --no-cache -f "${LOCATION}/Dockerfile" .
+              echo -e "\nBuild ${LOCATION} Success!"
             done
           fi
