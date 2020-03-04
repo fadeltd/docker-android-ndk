@@ -15,20 +15,22 @@ ARG JAVA_MINOR_VERSION="241"
 ARG JAVA_BUILD_VERSION="b07"
 ARG JAVA_VERSION="${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}"
 ARG JAVA_ARCH="linux-x64"
-ARG JAVA_HASH="1f5b5a70bf22433b84d0e960903adac8"
-ARG JAVA_PACKAGE="server-jre"
+# ARG JAVA_ORACLE_AUTH="1f5b5a70bf22433b84d0e960903adac8"
+# ARG JAVA_PACKAGE="server-jre"
+# ARG JAVA_BASE_URL="http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}-${JAVA_BUILD_VERSION}/${JAVA_ORACLE_AUTH}"
+ARG JAVA_ORACLE_AUTH="1f5b5a70bf22433b84d0e960903adac8"
+ARG JAVA_PACKAGE="jdk"
+ARG JAVA_BASE_URL="https://download.oracle.com/otn/java/jdk/${JAVA_VERSION}-${JAVA_BUILD_VERSION}/${JAVA_ORACLE_AUTH}"
 ARG JAVA_ASSET="${JAVA_PACKAGE}-${JAVA_VERSION}-${JAVA_ARCH}.tar.gz"
-ARG JAVA_BASE_URL="http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}-${JAVA_BUILD_VERSION}/${JAVA_HASH}"
 ARG JAVA_ASSET_URL="${JAVA_BASE_URL}/${JAVA_ASSET}"
 ARG JAVA_CHECKSUM="https://www.oracle.com/webfolder/s/digest/${JAVA_VERSION}checksum.html"
 ARG JAVA_TMP="/tmp/openjdk.tgz"
 ARG JAVA_TMP_SHA="${JAVA_TMP}.sha256"
 
 ARG JAVA_JVM_PATH="/usr/lib/jvm"
-ARG JAVA_JDK="java-1.8-openjdk"
+ARG JAVA_JDK="java-1.8-oracle"
 ENV JAVA_HOME "${JAVA_JVM_PATH}/${JAVA_JDK}"
 ENV PATH $PATH:$JAVA_HOME/bin
-# ENV JAVA_HOME /opt/jdk
 # ENV PATH $PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
 
 RUN set -eux; \
@@ -46,9 +48,9 @@ RUN set -eux; \
 	# chown -R root:root ${JAVA_HOME}; \
 # Java smoke test
 	which java; \
-	# java -version; \
+	java -version; \
 	which javac; \
-	ls "${JAVA_HOME}/jre/bin"
+	ls -lp "${JAVA_HOME}/jre/bin"
 	# javac -version
 
 # https://docs.oracle.com/javase/10/tools/jshell.htm
