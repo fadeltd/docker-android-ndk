@@ -36,9 +36,9 @@ ARG JAVA_TMP="/tmp/openjdk.tgz"
 
 RUN set -eux; \
     # need gnupg to sign this
-	wget -O "${JAVA_TMP}" "--header=Cookie: oraclelicense=accept-securebackup-cookie" "${JAVA_ASSET_URL}" \
-	sha256sum "${JAVA_TMP}" && \
-    JAVA_PACKAGE_SHA256=$(curl -sSL "${JAVA_CHECKSUM}" | grep -E "${JAVA_ASSET}" | grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs); \
+	wget -O "${JAVA_TMP}" "--header=Cookie: oraclelicense=accept-securebackup-cookie" "${JAVA_ASSET_URL}" && \
+	sha256sum "${JAVA_TMP}"; \
+    JAVA_PACKAGE_SHA256=$(curl -sSL "${JAVA_CHECKSUM}" | grep -E "${JAVA_ASSET}" | grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
 	echo "${JAVA_PACKAGE_SHA256} ${JAVA_TMP}" | sha256sum -c && \
 	# wget -O "${JAVA_TMP}" "${JAVA_ASSET_URL}"; \
 	# wget -O "${JAVA_TMP}.asc" "${JAVA_SIGN_URL}"; \
