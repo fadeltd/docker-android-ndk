@@ -39,22 +39,18 @@ RUN set -eux; \
 	mkdir -p "$JAVA_HOME"; \
     tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
 	ls -lp "${JAVA_JVM_PATH}"; \
-	find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre \
 	find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
-    ln -s "${JAVA_HOME}/jre/bin" "${JAVA_HOME}/bin"; \
+    apk del --no-network .java-deps; \
 	rm -rf /tmp/* /var/cache/apk/*; \
-	apk del --no-network .java-deps; \
-	# chown -R root:root ${JAVA_HOME}; \
+	chown -R root:root ${JAVA_HOME}; \
 # Java smoke test
 	which java; \
 	which javac; \
-	ls -lp "/opt/"; \
-	ls -lp "/usr/lib/jvm/"; \
-	ls -lp "${JAVA_HOME}"; \
-	ls -lp "${JAVA_HOME}/bin"; \
 	ln -s "${JAVA_HOME}/bin/java" "/usr/bin"; \
 	ln -s "${JAVA_HOME}/bin/javac" "/usr/bin"; \
+	ln -s "${JAVA_HOME}/bin/keytool" "/usr/bin"; \
 	ls -lp "/usr/bin"; \
+	java; \
 	java -version; \
 	javac -version
 
