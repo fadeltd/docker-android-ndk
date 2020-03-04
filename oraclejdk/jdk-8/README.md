@@ -1,4 +1,4 @@
-# Alpine 3.11 OpenJDK 8
+# Alpine 3.11 Oracle JDK 8
 
 ## Versions/tags
 
@@ -6,13 +6,13 @@
 |--------------|--------------|
 | alpine       | `3.11.3`     |
 | glibc        | `2.30-r0`    |
-| openjdk      | `8u242b08`   |
+| oracle jdk   | `8u241b07`   |
 
 ## Usage
 
 Example:
 
-    docker run -it --rm fadeltd/openjdk:8-alpine3.11 java -version
+    docker run -it --rm fadeltd/oraclejdk:8-alpine3.11 java -version
 
 ## Disclaimer
 
