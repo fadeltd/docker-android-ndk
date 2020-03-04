@@ -45,7 +45,7 @@ RUN set -eux; \
 	# wget -O "${JAVA_TMP}.asc" "${JAVA_SIGN_URL}"; \
 	mkdir -p "${JAVA_HOME}"; \
     tar --extract --file "${JAVA_TMP}" --directory "${JAVA_HOME}" --strip-components 1; \
-	# ln -s "$JAVA_HOME/bin/"* "/usr/bin/"; \
+	ln -s "$JAVA_HOME/bin/"* "/usr/bin/"; \
 # Clean up
 	# apk del glibc-i18n; \
 	rm -rf /tmp/* /var/cache/apk/*; \
