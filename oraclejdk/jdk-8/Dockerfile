@@ -46,10 +46,10 @@ RUN set -eux; \
 	# chown -R root:root ${JAVA_HOME}; \
 # Java smoke test
 	which java; \
-	java -version; \
-	java; \
+	# java -version; \
 	which javac; \
-	javac -version
+	ls "${JAVA_HOME}/jre/bin"
+	# javac -version
 
 # https://docs.oracle.com/javase/10/tools/jshell.htm
 # https://docs.oracle.com/javase/10/jshell/
