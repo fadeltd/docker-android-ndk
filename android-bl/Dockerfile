@@ -7,9 +7,9 @@ RUN apk --no-cache add --update \
     # coreutils \
     # curl \
     # git \
-    # g++ \
-    libstdc++
-    # make \
+    g++ \
+    libstdc++ \
+    make
     # openssl \
     # && wget -O git-lfs-linux-amd64-2.0.1.tar.gz https://github.com/github/git-lfs/releases/download/v2.0.1/git-lfs-linux-amd64-2.0.1.tar.gz \
     # && tar zxvf git-lfs-linux-amd64-2.0.1.tar.gz \
