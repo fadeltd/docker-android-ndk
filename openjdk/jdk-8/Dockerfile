@@ -22,11 +22,20 @@ ARG JAVA_BUILD_VERSION="08"
 ARG JAVA_VERSION="${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}"
 ARG JAVA_ALPINE_VERSION="${JAVA_MAJOR_VERSION}.${JAVA_MINOR_VERSION}.${JAVA_BUILD_VERSION}-r0"
 
-ENV JAVA_VERSION ${JAVA_VERSION} \
-	JAVA_HOME /usr/lib/jvm/java-1.${JAVA_MAJOR_VERSION}.0_${JAVA_MINOR_VERSION} \
-	PATH $PATH:${JAVA_HOME}/jre/bin:${JAVA_HOME}/bin
+ENV JAVA_VERSION "${JAVA_VERSION}"
+ENV JAVA_HOME "/usr/lib/jvm/java-1.${JAVA_MAJOR_VERSION}.0_${JAVA_MINOR_VERSION}"
+ENV PATH "$PATH:${JAVA_HOME}/jre/bin:${JAVA_HOME}/bin"
 
 # https://pkgs.alpinelinux.org/package/v3.11/community/x86/openjdk8
 RUN set -eux && \
 	apk add --no-cache openjdk8="${JAVA_ALPINE_VERSION}" && \
+	echo "${JAVA_HOME}"; \
+	echo "${PATH}"; \
+	cat "/usr/local/bin/docker-java-home"; \
+	which java; \
+	which javac; \
+	java -version; \
+	javac -version; \
+	ls -l; \
+	cat "docker-java-home"; \
 	[ "$JAVA_HOME" = "$(docker-java-home)" ]
