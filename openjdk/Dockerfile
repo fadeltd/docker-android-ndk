@@ -28,9 +28,10 @@ RUN set -eux; \
 	tar --extract --file /tmp/openjdk.tgz --directory "$JAVA_HOME" --strip-components 1; \
 	rm /tmp/openjdk.tgz; \
 	cd $JAVA_HOME/bin; \
+	echo $PATH; \
     ls -lp; \
 	chmod +x java; \
-	./java -v; \
+	./java --version; \
 	# java -Xshare:dump; \
 # java smoke test
 	java --version; \
