@@ -37,14 +37,12 @@ RUN set -eux; \
     JAVA_PACKAGE_SHA256=$(curl -sSL "${JAVA_CHECKSUM}" | grep -E "${JAVA_ASSET}" | grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
     echo "${JAVA_PACKAGE_SHA256}  ${JAVA_TMP}" | sha256sum -c && \
 	mkdir -p "$JAVA_HOME"; \
-    # tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
-	ls -lp /tmp/; \
-	gunzip "${JAVA_TMP}" && tar -C "${JAVA_JVM_PATH}" -xf /tmp/openjdk.tar; \
-	ls -lp "${JAVA_JVM_PATH}}"; \
-	ln -s "${JAVA_JVM_PATH}/jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_MMINOR_VERSION}" "${JAVA_HOME}"; \
+    tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
+	ls -lp "${JAVA_JVM_PATH}"; \
 	echo $(find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs); \
 	find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs rm -rf && \
-    ln -s "${JAVA_HOME}/jre/bin" "${JAVA_HOME}/bin"; \
+    echo $(find ${JAVA_HOME} -maxdepth 1 -mindepth 1 | grep -v jre | xargs); \
+	ln -s "${JAVA_HOME}/jre/bin" "${JAVA_HOME}/bin"; \
 	rm -rf /tmp/* /var/cache/apk/*; \
 	apk del --no-network .java-deps; \
 	# chown -R root:root ${JAVA_HOME}; \
