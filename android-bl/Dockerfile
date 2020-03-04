@@ -6,10 +6,14 @@ FROM ruby:2.7.0-alpine3.11
 # 		bash \
 # 		build-base \
 # 		git \
-# 		gmp-dev	\
 # 		make
 
 WORKDIR /home/ruby
-# COPY Gemfile ./
-COPY Gemfile /Gemfile
-RUN bundle install
+COPY Gemfile Gemfile.lock ./
+# COPY Gemfile /Gemfile
+RUN bundle -v \
+    bundle env \
+    ruby -v \
+    pwd \
+    ls \
+    bundle install
