@@ -37,12 +37,12 @@ RUN set -eux; \
 	tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
 	rm "${JAVA_TMP}"; \
 	apk del --no-network .java-deps; \
-	chown -R root ${JAVA_HOME}; \
+	chown -R root:root ${JAVA_HOME}; \
 	ls -l "${JAVA_HOME}/bin"; \
 # Java smoke test
 	which java; \
 	which javac; \
-	${JAVA_HOME}/bin/java -version; \
+	if [[ -f "${JAVA_HOME}/bin/java" && -x $(realpath "${JAVA_HOME}/bin/java") ]]; then echo 'executable'; else; echo 'not executable'; fi; \
 	java -version; \
 	javac -version
 
