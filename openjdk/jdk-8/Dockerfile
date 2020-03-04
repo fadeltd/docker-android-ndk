@@ -11,7 +11,7 @@ ARG JAVA_MINOR_VERSION="242"
 ARG JAVA_BUILD_VERSION="08"
 ARG JAVA_VERSION="${JAVA_MAJOR_VERSION}u${JAVA_MINOR_VERSION}"
 ARG JAVA_ALPINE_VERSION="${JAVA_MAJOR_VERSION}.${JAVA_MINOR_VERSION}.${JAVA_BUILD_VERSION}-r0"
-ARG JAVA_JDK="java-1.8-openjdk"
+# ARG JAVA_JDK="java-1.8-openjdk"
 # ARG JAVA_DEFAULT_JVM_PATH=/usr/lib/jvm/${JAVA_JDK}
 ARG JAVA_DEFAULT_JVM_PATH="/usr/lib/jvm/default-jvm"
 
@@ -24,6 +24,7 @@ ENV PATH "$PATH:${JAVA_HOME}/bin:${JAVA_HOME}/jre/bin"
 RUN set -eux && \
 	apk add --no-cache openjdk8="${JAVA_ALPINE_VERSION}" && \
 	mv "${JAVA_DEFAULT_JVM_PATH}" "${JAVA_HOME}"; \
+	ls -l "${JAVA_HOME}\bin"; \
 # Java smoke test
 	which java; \
 	java -version; \

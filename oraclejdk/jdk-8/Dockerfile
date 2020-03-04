@@ -1,11 +1,10 @@
 ARG ALPINE_VERSION="3.11.3"
 ARG ALPINE_IMAGE=alpine:${ALPINE_VERSION}
-FROM ${ALPINE_IMAGE}
-LABEL maintainer="Fadel Trivandi Dipantara <fadeltd@hotmail.com>"
-LABEL description="Alpine 3.11 Open JDK 8"
 
-ENV JAVA_HOME /opt/jdk
-ENV PATH $PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
+FROM ${ALPINE_IMAGE}
+
+LABEL maintainer="Fadel Trivandi Dipantara <fadeltd@hotmail.com>"
+LABEL description="Alpine 3.11 Oracle JDK 8"
 
 # https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
 # Java™ Platform Standard Edition Development Kit (JDK™).
@@ -23,6 +22,11 @@ ARG JAVA_CHECKSUM="https://www.oracle.com/webfolder/s/digest/${JAVA_VERSION}chec
 ARG JAVA_TMP="/tmp/openjdk.tgz"
 ARG JAVA_TMP_SHA="${JAVA_TMP}.sha256"
 
+ARG JAVA_JDK="java-1.8-openjdk"
+ENV JAVA_HOME /usr/lib/jvm/${JAVA_JDK}
+# ENV JAVA_HOME /opt/jdk
+ENV PATH $PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
+
 RUN set -eux; \
 	apk -U upgrade; \
     apk add --no-cache --virtual .java-deps curl; \
@@ -32,8 +36,8 @@ RUN set -eux; \
 	mkdir -p "$JAVA_HOME"; \
 	tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
 	rm "${JAVA_TMP}"; \
-	# echo "${PATH}" && ls -lp "${JAVA_HOME}" && ls -lp "${JAVA_HOME}/bin" && ls -lp "${JAVA_HOME}/jre" && ls -lp "${JAVA_HOME}/jre/bin"; \
 	apk del --no-network .java-deps; \
+	ls -l "${JAVA_HOME}\bin"; \
 # Java smoke test
 	which java; \
 	which javac; \
