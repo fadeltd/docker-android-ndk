@@ -13,9 +13,6 @@ ENV ANDROID_HOME "/opt/android/sdk"
 ENV ANDROID_NDK_HOME "$ANDROID_HOME/ndk/${NDK_VERSION}"
 ENV PATH=$PATH:$ANDROID_HOME/cmake/${CMAKE_VERSION}/bin/:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
 
-# Install required dependencies
-RUN apk add --no-cache bash git
-
 # Download and extract Android Tools
 RUN wget -q "http://dl.google.com/android/repository/sdk-tools-linux-${SDK_TOOLS}.zip" -O /tmp/tools.zip && \
     mkdir -p ${ANDROID_HOME} && \
