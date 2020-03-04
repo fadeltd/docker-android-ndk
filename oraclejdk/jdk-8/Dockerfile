@@ -45,14 +45,13 @@ RUN set -eux; \
 	for pkg in ${GLIBC_PACKAGES}; do wget -O "/tmp/${pkg}" "${GLIBC_DOWNLOAD}/${pkg}"; done && \
 	apk add --allow-untrusted /tmp/*.apk && \
     rm -v /tmp/*.apk; \
-    ${GLIBC_PATH}/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8; \
+    # ( ${GLIBC_PATH}/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8; || true ); \
     echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh; \
     ${GLIBC_PATH}/sbin/ldconfig /lib ${GLIBC_PATH}/lib; \
     echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf; \
 # Install java from oracle
     wget -O "${JAVA_TMP}" "--header=Cookie: oraclelicense=accept-securebackup-cookie" "${JAVA_ASSET_URL}" && \
-	sha256sum "${JAVA_TMP}"; \
-    JAVA_PACKAGE_SHA256=$(curl -sSL "${JAVA_CHECKSUM}" | grep -E "${JAVA_ASSET}" | grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
+	JAVA_PACKAGE_SHA256=$(curl -sSL "${JAVA_CHECKSUM}" | grep -E "${JAVA_ASSET}" | grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
     echo "${JAVA_PACKAGE_SHA256}  ${JAVA_TMP}" | sha256sum -c; \
 	mkdir -p "${JAVA_HOME}"; \
     tar --extract --file "${JAVA_TMP}" --directory "${JAVA_HOME}" --strip-components 1; \
@@ -100,12 +99,12 @@ RUN set -eux; \
 			/tmp/* /var/cache/apk/*; \
 # Java smoke test
 	which java; \
-	# java -version; \
+	java -version; \
 	which javac; \
 	ls -lp "${JAVA_HOME}/lib"; \
 	ls -lp "${JAVA_HOME}/jre/bin"; \
-	ls -lp "${JAVA_HOME}/jre/lib"
-	# javac -version
+	ls -lp "${JAVA_HOME}/jre/lib"; \
+	javac -version
 
 # https://docs.oracle.com/javase/10/tools/jshell.htm
 # https://docs.oracle.com/javase/10/jshell/
