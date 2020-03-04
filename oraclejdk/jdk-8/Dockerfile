@@ -45,7 +45,7 @@ RUN set -eux; \
 	for pkg in ${GLIBC_PACKAGES}; do wget -O "/tmp/${pkg}" "${GLIBC_DOWNLOAD}/${pkg}"; done && \
 	apk add --allow-untrusted /tmp/*.apk && \
     rm -v /tmp/*.apk; \
-    ( ${GLIBC_PATH}/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8; || true ); \
+    ( ${GLIBC_PATH}/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8 || true ); \
     echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh; \
     ${GLIBC_PATH}/sbin/ldconfig /lib ${GLIBC_PATH}/lib; \
     echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf; \
