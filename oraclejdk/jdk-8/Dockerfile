@@ -37,7 +37,7 @@ RUN set -eux; \
 	tar --extract --file "${JAVA_TMP}" --directory "$JAVA_HOME" --strip-components 1; \
 	rm "${JAVA_TMP}"; \
 	apk del --no-network .java-deps; \
-	ls -l "${JAVA_HOME}\bin"; \
+	ls -l "${JAVA_HOME}/bin"; \
 # Java smoke test
 	which java; \
 	which javac; \

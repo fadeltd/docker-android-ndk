@@ -24,7 +24,7 @@ ENV PATH "$PATH:${JAVA_HOME}/bin:${JAVA_HOME}/jre/bin"
 RUN set -eux && \
 	apk add --no-cache openjdk8="${JAVA_ALPINE_VERSION}" && \
 	mv "${JAVA_DEFAULT_JVM_PATH}" "${JAVA_HOME}"; \
-	ls -l "${JAVA_HOME}\bin"; \
+	ls -l "${JAVA_HOME}/bin"; \
 # Java smoke test
 	which java; \
 	java -version; \
