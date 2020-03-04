@@ -10,6 +10,6 @@ FROM ruby:2.7.0-alpine3.11
 # 		make
 
 WORKDIR /home/ruby
-
-COPY Gemfile ./
+# COPY Gemfile ./
+COPY Gemfile /Gemfile
 RUN bundle install
