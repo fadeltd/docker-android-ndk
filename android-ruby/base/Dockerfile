@@ -1,5 +1,6 @@
 FROM fadeltd/alpine-android-ndk-base
 LABEL description="Alpine Android NDK Base with Latest Ruby"
+LABEL maintainer="Fadel Trivandi Dipantara <fadeltd@hotmail.com>"
 
 RUN apk add --no-cache \
 		gmp-dev

@@ -67,3 +67,19 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         dockerfile: android-ruby/sdk-29/Dockerfile
         tags: "latest, 2.7.0-sdk29"
+    - name: Publish BL Android Base
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: fadeltd/android-bl-base
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        dockerfile: android-ruby/sdk-29/Dockerfile
+        tags: "latest"
+    - name: Publish Android NDK with SDK 29 and Ruby
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: fadeltd/android-bl-base
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        dockerfile: android-ruby/sdk-29/Dockerfile
+        tags: "latest, sdk-28"

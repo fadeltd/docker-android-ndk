@@ -1,0 +1,42 @@
+FROM fadeltd/alpine-android-ndk-ruby-base
+LABEL description="Alpine Android NDK with Ruby, Git LFS, Firebase, Fastlane"
+LABEL maintainer="Fadel Trivandi Dipantara <fadeltd@hotmail.com>"
+
+RUN apk --no-cache add \
+    g++ \
+    libstdc++ \
+    bash \
+    curl \
+    git \
+    make
+
+# Git LFS
+ARG GIT_LFS_VERSION="v2.10.0"
+ARG GIT_LFS_REPO="https://github.com/github/git-lfs"
+ARG GIT_LFS_DOWNLOAD="${GIT_REPO}/releases/download"
+ARG GIT_LFS_ARCH="linux-amd64"
+ARG GIT_LFS_PACKAGE="git-lfs"
+ARG GIT_LFS_ASSET="${GIT_LFS_PACKAGE}-${GIT_LFS_VERSION}.tar.gz"
+ARG GIT_LFS_URL="${GIT_DOWNLOAD}/${GIT_LFS_VERSION}/${GIT_LFS_ASSET}"
+RUN set -eux; \
+    wget -O tmp/${GIT_LFS_ASSET} ${GIT_LFS_URL}; \
+    mkdir -p "tmp/git-lfs"; \
+    tar -C "tmp/git-lfs" -xf "tmp/${GIT_LFS_ASSET}" "install.sh" "git-lfs"; \
+    install.sh; \
+    mv tmp/git-lfs /usr/local/bin; \
+    rm -rf tmp/*
+
+# Firebase
+RUN wget -O tmp/firebase https://firebase.tools/bin/linux/latest \
+    && chmod +xr tmp/firebase \
+    && mv firebase /usr/local/bin/firebase
+
+# Fastlane
+ENV FASTLANE_VERSION="2.142.0"
+RUN apk --no-cache add --update curl-dev imagemagick && \
+    gem install fastlane -N -v $FASTLANE_VERSION && \
+    gem install badge;
+
+WORKDIR /home/android
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
