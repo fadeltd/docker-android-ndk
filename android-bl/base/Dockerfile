@@ -23,9 +23,11 @@ RUN set -eux; \
     wget -O /tmp/${GIT_LFS_ASSET} ${GIT_LFS_URL}; \
     echo "${GIT_LFS_SHA}  /tmp/${GIT_LFS_ASSET}" | sha256sum -c; \
     mkdir -p "/tmp/git-lfs"; \
-    tar -C "/tmp/git-lfs" -xf "/tmp/${GIT_LFS_ASSET}" "/tmp/install.sh" "/tmp/git-lfs"; \
-    /tmp/install.sh; \
-    mv /tmp/git-lfs /usr/local/bin; \
+    tar -C "/tmp/git-lfs" -xf "/tmp/${GIT_LFS_ASSET}" "install.sh" "git-lfs"; \
+    /tmp/git-lfs/install.sh; \
+    # mv /tmp/git-lfs/git-lfs /usr/local/bin/git-lfs; \
+    which git-lfs; \
+    git-lfs --version; \
     rm -rf /tmp/*
 
 # Firebase
