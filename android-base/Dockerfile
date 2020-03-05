@@ -33,12 +33,12 @@ RUN yes | sdkmanager \
         "cmake;${CMAKE_VERSION}" \
         "ndk;${NDK_VERSION}" >/dev/null
 
-RUN ls -l $ANDROID_NDK_HOME/build && \
-    ls -l $ANDROID_NDK_HOME/sources/ && \
-    ls -l $ANDROID_NDK_HOME/sources/cxx-stl && \
-    ls -l $ANDROID_NDK_HOME/platforms/ && \
-    ls -l $ANDROID_NDK_HOME/prebuilt && \
-    ls -l $ANDROID_NDK_HOME/toolchains/
+# RUN ls -l $ANDROID_NDK_HOME/build && \
+#     ls -l $ANDROID_NDK_HOME/sources/ && \
+#     ls -l $ANDROID_NDK_HOME/sources/cxx-stl && \
+#     ls -l $ANDROID_NDK_HOME/platforms/ && \
+#     ls -l $ANDROID_NDK_HOME/prebuilt && \
+#     ls -l $ANDROID_NDK_HOME/toolchains/
 
 # Delete unnecessary NDK Packages
 RUN rm -rf  \
