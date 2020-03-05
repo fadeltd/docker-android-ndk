@@ -23,9 +23,10 @@ RUN set -eux; \
     wget -O /tmp/${GIT_LFS_ASSET} ${GIT_LFS_URL}; \
     echo "${GIT_LFS_SHA}  /tmp/${GIT_LFS_ASSET}" | sha256sum -c; \
     mkdir -p "/tmp/git-lfs"; \
-    tar -C "/tmp/git-lfs" -xf "/tmp/${GIT_LFS_ASSET}" "install.sh" "git-lfs"; \
-    # /tmp/git-lfs/install.sh; \
+    tar -C "/tmp/git-lfs" -xf "/tmp/${GIT_LFS_ASSET}" "git-lfs"; \
     mv /tmp/git-lfs/git-lfs /usr/local/bin/git-lfs; \
+    # tar -C "/tmp/git-lfs" -xf "/tmp/${GIT_LFS_ASSET}" "install.sh"; \
+    # /tmp/git-lfs/install.sh; \
     which git-lfs; \
     git-lfs --version; \
     rm -rf /tmp/*
@@ -33,14 +34,19 @@ RUN set -eux; \
 # Firebase
 RUN wget -O /tmp/firebase https://firebase.tools/bin/linux/latest \
     && chmod +xr /tmp/firebase \
-    && mv firebase /usr/local/bin/firebase
+    && mv /tmp/firebase /usr/local/bin/
 
 # Fastlane
-ENV FASTLANE_VERSION="2.142.0"
+ARG FASTLANE_VERSION="2.142.0"
 RUN apk --no-cache add --update curl-dev imagemagick && \
-    gem install fastlane -N -v $FASTLANE_VERSION && \
+    gem install fastlane -N -v ${FASTLANE_VERSION} && \
     gem install badge;
+
+# Bundler
+ARG BUNDLER_VERSION="1.17.3"
+RUN gem install bundler --default -v ${BUNDLER_VERSION}
 
 WORKDIR /home/android
 COPY Gemfile Gemfile.lock ./
-RUN bundle install
+RUN gem list; \
+    bundle install
