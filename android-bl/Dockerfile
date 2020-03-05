@@ -3,9 +3,9 @@ FROM fadeltd/alpine-android-ndk-ruby-base
 
 RUN apk --no-cache add g++ libstdc++
 
-RUN apk --no-cache add --update \
+# RUN apk --no-cache add --update \
     # bash \
-    curl
+    # curl \
     # git \
     # make \
     # && wget -O git-lfs-linux-amd64-2.0.1.tar.gz https://github.com/github/git-lfs/releases/download/v2.0.1/git-lfs-linux-amd64-2.0.1.tar.gz \
@@ -22,14 +22,10 @@ RUN apk --no-cache add --update \
 ## Fastlane
 ENV FASTLANE_VERSION=2.142.0
 RUN apk --no-cache add --update \
-    # curl-dev \
+    curl-dev \
     imagemagick \
     && gem install fastlane -N -v $FASTLANE_VERSION \
     && gem install badge;
-
-# ENV LANG en_US.UTF-8
-# ENV LANGUAGE en_US:en
-# ENV LC_ALL en_US.UTF-8
 
 WORKDIR /home/android
 COPY Gemfile Gemfile.lock ./
