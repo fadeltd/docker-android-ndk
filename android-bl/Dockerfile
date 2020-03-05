@@ -22,7 +22,7 @@ RUN apk --no-cache add g++ libstdc++
 ## Fastlane
 ENV FASTLANE_VERSION=2.142.0
 RUN apk --no-cache add --update \
-    curl-dev \
+    # curl-dev \
     imagemagick \
     && gem install fastlane -N -v $FASTLANE_VERSION \
     && gem install badge;
