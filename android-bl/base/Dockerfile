@@ -13,7 +13,7 @@ RUN apk --no-cache add \
 # Git LFS
 ARG GIT_LFS_VERSION="v2.10.0"
 ARG GIT_LFS_REPO="https://github.com/github/git-lfs"
-ARG GIT_LFS_DOWNLOAD="${GIT_REPO}/releases/download"
+ARG GIT_LFS_DOWNLOAD="${GIT_LFS_REPO}/releases/download"
 ARG GIT_LFS_ARCH="linux-amd64"
 ARG GIT_LFS_PACKAGE="git-lfs"
 ARG GIT_LFS_ASSET="${GIT_LFS_PACKAGE}-${GIT_LFS_VERSION}.tar.gz"
