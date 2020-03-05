@@ -43,10 +43,10 @@ RUN apk --no-cache add --update curl-dev imagemagick && \
     gem install badge;
 
 # Bundler
-ARG BUNDLER_VERSION="1.17.3"
-RUN gem install bundler --default -v ${BUNDLER_VERSION}
+# ARG BUNDLER_VERSION="1.17.3"
+# RUN gem install bundler --default -v ${BUNDLER_VERSION}
 
 WORKDIR /home/android
-COPY Gemfile Gemfile.lock ./
-RUN gem list; \
-    bundle install
+# COPY Gemfile Gemfile.lock ./
+COPY Gemfile ./
+RUN bundle install
